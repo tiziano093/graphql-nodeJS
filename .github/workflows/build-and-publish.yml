@@ -1,0 +1,94 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  actions: read
+  contents: write  # Necessario per fare versioning con Lerna
+        
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+    
+      - name: Authenticate with GitHub CLI
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          git config --global user.email "ci@example.com"
+          git config --global user.name "CI Runner"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' 
+          cache: 'npm'
+    
+      - name: google auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      
+      - name: Generate .npmrc
+        env:
+          NPM_REGISTRY_URL: ${{ secrets.NPM_REGISTRY_URL }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: |
+          echo "@tiziano093:registry=https:$NPM_REGISTRY_URL" >> .npmrc
+          echo "$NPM_REGISTRY_URL:always-auth=true" >> .npmrc
+          echo "$NPM_REGISTRY_URL:_password=$NPM_AUTH_TOKEN" >> .npmrc
+          echo "$NPM_REGISTRY_URL }}:username=_json_key_base64" >> .npmrc
+          echo "$NPM_REGISTRY_URL:email=not.valid@email.com" >> .npmrc
+
+      - name: check .npmrc
+        run: cat .npmrc
+
+      - name: Google Artifactory npm auth
+        run: npx google-artifactregistry-auth .npmrc
+
+      - name: Check npm authentication
+        run: npm whoami || echo "NPM Authentication failed"
+
+      - name: Install dependencies
+        run: npm install
+        
+      - name: Lint
+        run: npm run lint
+
+      - name: Bump Version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm config set //europe-north1-npm.pkg.dev/helical-song-449808-e5/npm-repo/:_password=$NPM_AUTH_TOKEN
+          HUSKY=0 npx lerna publish --conventional-commits --yes --registry=https:${{ secrets.NPM_REGISTRY_URL }} --force-publish
+
+      - name: Docker Build
+        env:
+          REPO_NAME: ${{ github.repository }}
+        run: |
+          IMAGE_NAME=$(basename $REPO_NAME | tr '[:upper:]' '[:lower:]')
+          docker build -t $IMAGE_NAME . -f graphql-server/Dockerfile
+
+      - name: Configure Docker with Google Artifactory
+        run: gcloud auth configure-docker europe-north1-docker.pkg.dev
+
+      - name: Push Docker image to Artifact Registry
+        env:
+          REPO_NAME: ${{ github.repository }}
+        run: |
+          IMAGE_NAME=$(basename $REPO_NAME | tr '[:upper:]' '[:lower:]')
+          TARGET_IMAGE=europe-north1-docker.pkg.dev/${{ secrets.GOOGLE_PROJECT_ID }}/docker-repo/$IMAGE_NAME
+
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+
+          docker tag $IMAGE_NAME $TARGET_IMAGE:latest
+          docker tag $IMAGE_NAME $TARGET_IMAGE:$COMMIT_SHA
+
+          docker push $TARGET_IMAGE:latest
+          docker push $TARGET_IMAGE:$COMMIT_SHA

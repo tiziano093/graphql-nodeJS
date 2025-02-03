@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "version": "independent",
+  "packages": ["packages/*", "graphql-server"],
+  "npmClient": "npm",
+  "command": {
+    "publish": {
+      "message": "chore: release commit", 
+      "registry": "https://europe-north1-npm.pkg.dev/helical-song-449808-e5/npm-repo/"
+    }
+  }
+}
