@@ -10,6 +10,7 @@
     "test": "lerna run test --ignore=@tiziano093/graphql-server",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "cz": "git-cz" ,
     "start": "lerna run start --scope @tiziano093/graphql-server"
   },
   "config": {
