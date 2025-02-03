@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "version": "indipendent",
+  "version": "independent",
   "packages": ["packages/*", "graphql-server"],
   "npmClient": "npm"
 }
