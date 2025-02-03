@@ -1,22 +1,4 @@
-COMMIT_MSG_FILE="$1"
-COMMIT_SOURCE="$2"
-ORIGINAL_MSG=$(sed -e '/^#/d' -e '/^$/d' "$COMMIT_MSG_FILE")
 
-if [ "$COMMIT_SOURCE" = "message" ]; then
-  if echo "$ORIGINAL_MSG" | npx commitlint >/dev/null 2>&1; then
-    exit 0
-  else
-    # Avvia Commitizen con il messaggio precompilato
-    exec < /dev/tty
-    echo "$ORIGINAL_MSG" > "$COMMIT_MSG_FILE"
-    npx cz --hook --message "$ORIGINAL_MSG" || true
-    
-    # Pulisce il file dai commenti
-    sed -i.bak -e '/^#/d' -e '/^$/d' "$COMMIT_MSG_FILE"
-    rm -f "$COMMIT_MSG_FILE.bak"
-  fi
-else
-  # Flusso normale senza messaggio preesistente
-  exec < /dev/tty
-  npx cz --hook --message "$ORIGINAL_MSG" || true
-fi
+exec < /dev/tty  
+
+npx cz --hook || true
