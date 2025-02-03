@@ -3,6 +3,7 @@ const { ApolloServer } = require("apollo-server-express");
 const schema = require("./config/partials");
 
 async function startApolloServer() {
+    
   const server = new ApolloServer({ schema });
   const app = express();
 
