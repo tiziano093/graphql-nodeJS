@@ -18,5 +18,5 @@ if [ "$COMMIT_SOURCE" = "message" ]; then
 else
   # Flusso normale senza messaggio preesistente
   exec < /dev/tty
-  npx cz --hook || true
+  npx cz --hook --message "$ORIGINAL_MSG" || true
 fi
