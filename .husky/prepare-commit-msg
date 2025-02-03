@@ -1,22 +1,13 @@
-COMMIT_MSG_FILE="$1"
-COMMIT_SOURCE="$2"
+# COMMIT_MSG_FILE="$1"
+# COMMIT_SOURCE="$2"
 
-# Estrae il messaggio esistente (se presente)
-CURRENT_MSG=$(cat "$COMMIT_MSG_FILE" 2>/dev/null || echo "")
+# # Estrae il messaggio esistente (se presente)
+# MSG_FILE=$(cat "$COMMIT_MSG_FILE" 2>/dev/null || echo "")
 
-# Se esiste un messaggio, lo usa come input per Commitizen
-if [ -n "$CURRENT_MSG" ] && [ "$COMMIT_SOURCE" != "message" ]; then
-  {
-    echo "# [Messaggio originale mantenuto come riferimento]"
-    echo "$CURRENT_MSG"
-    echo ""
-  } >> "$COMMIT_MSG_FILE"
-fi
+# # Avvia Commitizen in modalità hook
+# exec < /dev/tty
+# npx cz --hook || true
 
-# Avvia Commitizen in modalità hook
-exec < /dev/tty
-npx cz --hook || true
-
-# Pulisce i commenti dal messaggio finale
-sed -i.bak -e '/^#/d' -e '/^$/d' "$COMMIT_MSG_FILE"
-rm -f "$COMMIT_MSG_FILE.bak"
+# # Pulisce i commenti dal messaggio finale
+# sed -i.bak -e '/^#/d' -e '/^$/d' "$COMMIT_MSG_FILE"
+# rm -f "$COMMIT_MSG_FILE.bak"
