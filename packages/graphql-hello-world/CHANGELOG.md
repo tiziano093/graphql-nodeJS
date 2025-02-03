@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/tiziano093/graphql-nodeJS/compare/@tiziano093/graphql-hello-world@1.3.0...@tiziano093/graphql-hello-world@1.4.0) (2025-02-03)
+
+### Features
+
+- test ([990c716](https://github.com/tiziano093/graphql-nodeJS/commit/990c71672e3a2d6a62e7e4e1a528983aca666903))
+
 # [1.3.0](https://github.com/tiziano093/graphql-nodeJS/compare/@tiziano093/graphql-hello-world@1.2.1...@tiziano093/graphql-hello-world@1.3.0) (2025-02-03)
 
 ### Features
