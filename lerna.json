@@ -2,10 +2,5 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "version": "independent",
   "packages": ["packages/*", "graphql-server"],
-  "npmClient": "npm",
-  "command": {
-    "version": {
-      "message": "chore: release version"
-    }
-  }
+  "npmClient": "npm"
 }
