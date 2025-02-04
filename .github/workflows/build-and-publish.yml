@@ -1,0 +1,50 @@
+name: Build and Push Docker Image
+
+on:
+  pull_request:
+    branches: 
+      main
+  workflow_dispatch:
+        
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout del repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+    
+      - name: Authenticate with GitHub CLI
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          git config --global user.email "ci@example.com"
+          git config --global user.name "CI Runner"
+
+      # Setup di Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Sostituisci con la versione di Node.js che usi
+          cache: 'yarn'
+
+      # Installazione delle dipendenze
+      - name: Install dependencies
+        run: npm install
+        
+      # Lint
+      - name: Lint
+        run: npm run lint
+
+      # Unit Test
+      - name: Unit Test
+        run: npm run test
+
+      # Coverage Test
+      - name: Unit Test
+        run: npm run test:coverage
+        
+      # Build del progetto
+      - name: Build project
+        run: npx lerna run build
+      
