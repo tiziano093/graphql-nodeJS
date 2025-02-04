@@ -19,18 +19,17 @@ jobs:
             credentials_json: ${{ secrets.GCP_SA_KEY }}
 
         - name: Configure Docker with Google Artifactory
-          run: gcloud auth configure-docker ${{ secrets.REPO_LOCATION }}-docker.pkg.dev
+          run: gcloud auth configure-docker europe-north1-docker.pkg.dev
 
         - id: 'deploy'
           run: |
-            VERSION=${{ env.COMMIT_SHA }}
-            IMAGE_URI=${{ secrets.REPO_LOCATION }}-docker.pkg.dev/${{ secrets.PROJECT_ID }}/${{ secrets.CLOUD_REPO_NAME }}/$(basename ${{ github.repository }}):$VERSION
+            VERSION=latest
+            IMAGE_URI=europe-north1-docker.pkg.dev/helical-song-449808-e5/docker-repo/tiziano093/graphql-server:latest
             
             gcloud run deploy $(basename ${{ github.repository }}) \
               --image $IMAGE_URI \
               --format json \
-              --region ${{ secrets.DEPLOY_LOCATION }} \
+              --region europe-north1 \
               --platform managed \
               --allow-unauthenticated \
-              --set-env-vars API_URL=https://net0-be-158747903386.europe-west8.run.app \
-              --port ${{ secrets.PORT }}
+              --port 4000
