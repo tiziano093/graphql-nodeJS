@@ -45,7 +45,7 @@ jobs:
           --project=helical-song-449808-e5 \ 
           --repository=npm-repo \
           --location=europe-north1 \
-          --scope=@tiziano093 > .npmrc
+          --scope=@tiziano093 >> .npmrc
 
       - name: Bump Version
         run: npm run publish
