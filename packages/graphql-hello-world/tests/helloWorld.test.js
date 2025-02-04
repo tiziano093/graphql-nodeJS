@@ -15,7 +15,7 @@ describe('GraphQL helloWorld Tests', () => {
     });
 
     // Test per verificare che la query `hello` restituisca il valore giusto
-    it('should return "Hello, world!" for the hello query', async () => {
+    it('should return "Hello world!" for the hello query', async () => {
         const query = `
       query {
         hello
@@ -24,6 +24,6 @@ describe('GraphQL helloWorld Tests', () => {
 
         const result = await server.executeOperation({ query });
         expect(result.errors).toBeUndefined();
-        expect(result.data.hello).toBe('Hello, world!');
+        expect(result.data.hello).toBe('Hello world!');
     });
 });
