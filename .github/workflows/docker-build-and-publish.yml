@@ -45,6 +45,9 @@ jobs:
       - name: Docker Build
         run: docker build -t tiziano093/graphql-server . -f graphql-server/Dockerfile
 
+      - name: Configure Docker with Google Artifactory
+        run: gcloud auth configure-docker europe-north1-docker.pkg.dev
+
       - name: Push Docker image to Artifact Registry
         run: |
           IMAGE_NAME=tiziano093/graphql-server
