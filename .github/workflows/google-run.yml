@@ -26,7 +26,7 @@ jobs:
             VERSION=latest
             IMAGE_URI=europe-north1-docker.pkg.dev/helical-song-449808-e5/docker-repo/tiziano093/graphql-server:latest
             
-            gcloud run deploy tiziano093/graphql-server \
+            gcloud run deploy graphql-server \
               --image $IMAGE_URI \
               --format json \
               --region europe-north1 \
