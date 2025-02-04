@@ -50,4 +50,5 @@ jobs:
           IMAGE_NAME=tiziano093/graphql-server
           TARGET_IMAGE=europe-north1-docker.pkg.dev/helical-song-449808-e5/docker-repo/$IMAGE_NAME
 
+          docker tag tiziano093/graphql-server $TARGET_IMAGE
           docker push $TARGET_IMAGE:latest
