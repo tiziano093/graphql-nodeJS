@@ -39,17 +39,6 @@ jobs:
           project_id: 'helical-song-449808-e5'
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Update gcloud
-        run: gcloud components update
-        
-      - name: Google Cloud Auth
-        run: |
-          gcloud artifacts print-settings npm \ 
-          --project=helical-song-449808-e5 \ 
-          --repository=npm-repo \
-          --location=europe-north1 \
-          --scope=@tiziano093 >> .npmrc
-
       - name: Bump Version
         run: npm run publish
 
