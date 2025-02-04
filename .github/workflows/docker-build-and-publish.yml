@@ -38,6 +38,9 @@ jobs:
         with:
           project_id: 'helical-song-449808-e5'
           credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Update gcloud
+        run: gcloud components update
         
       - name: Google Cloud Auth
         run: |
