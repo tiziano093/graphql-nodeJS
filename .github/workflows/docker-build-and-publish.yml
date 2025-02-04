@@ -1,0 +1,61 @@
+name: Build and Push Docker Image
+
+on:
+  workflow_dispatch:
+        
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout del repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+    
+      - name: Authenticate with GitHub CLI
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          git config --global user.email "ci@example.com"
+          git config --global user.name "CI Runner"
+
+      # Setup di Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # Sostituisci con la versione di Node.js che usi
+          cache: 'npm'
+
+      # Installazione delle dipendenze
+      - name: Install dependencies
+        run: npm install
+        
+      # Lint
+      - name: Lint
+        run: npm run lint
+
+      - name: google auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: 'helical-song-449808-e5'
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+        
+      - name: Google Cloud Auth
+        run: |
+          gcloud artifacts print-settings npm \ 
+          --project=helical-song-449808-e5 \ 
+          --repository=npm-repo \
+          --location=europe-north1 \
+          --scope=@tiziano093 > .npmrc
+
+      - name: Bump Version
+        run: npm run publish
+
+      - name: Docker Build
+        run: docker build -t tiziano093/graphql-server . -f graphql-server/Dockerfile
+
+      - name: Push Docker image to Artifact Registry
+        run: |
+          IMAGE_NAME=tiziano093/graphql-server
+          TARGET_IMAGE=europe-north1-docker.pkg.dev/helical-song-449808-e5/docker-repo/$IMAGE_NAME
+
+          docker push $TARGET_IMAGE:latest

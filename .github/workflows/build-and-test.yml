@@ -4,7 +4,6 @@ on:
   pull_request:
     branches: 
       main
-  workflow_dispatch:
         
 jobs:
   build-and-publish:
@@ -43,8 +42,3 @@ jobs:
       # Coverage Test
       - name: Unit Test
         run: npm run test:coverage
-        
-      # Build del progetto
-      - name: Build project
-        run: npx lerna run build
-      

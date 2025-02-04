@@ -4,8 +4,9 @@
   "packages": ["packages/*", "graphql-server"],
   "npmClient": "npm",
   "command": {
-    "version": {
-      "message": "chore: release version"
+    "publish": {
+      "message": "chore: release commit", 
+      "registry": "https://europe-north1-npm.pkg.dev/helical-song-449808-e5/npm-repo/"
     }
   }
 }

@@ -11,6 +11,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "version:bump": "HUSKY=0 npx lerna version --conventional-commits --yes",
+    "publish": "HUSKY=0 npx lerna publish --conventional-commits --yes --registry",
     "cz": "git-cz" ,
     "start": "lerna run start --scope @tiziano093/graphql-server"
   },
