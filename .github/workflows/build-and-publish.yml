@@ -47,7 +47,6 @@ jobs:
       #     echo "$NPM_REGISTRY_URL }}:username=_json_key_base64" >> .npmrc
       #     echo "$NPM_REGISTRY_URL:email=not.valid@email.com" >> .npmrc
 
-      - run: cp npmrc .npmrc
       - run: npm run artifactregistry-login .npmrc
 
       - name: check .npmrc
