@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.14 (2025-02-05)
+
+**Note:** Version bump only for package @tiziano093/graphql-server
+
 ## 1.1.13 (2025-02-05)
 
 **Note:** Version bump only for package @tiziano093/graphql-server
