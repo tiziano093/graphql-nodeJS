@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: '18' 
           cache: 'npm'
-      
+    
       - name: google auth
         uses: 'google-github-actions/auth@v2'
         with:
@@ -56,6 +56,9 @@ jobs:
       - name: Google Artifactory npm auth
         run: npx google-artifactregistry-auth
 
+      - name: Check npm authentication
+        run: npm whoami || echo "NPM Authentication failed"
+
       - name: Install dependencies
         run: npm install
         
@@ -65,7 +68,9 @@ jobs:
       - name: Bump Version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: HUSKY=0 npx lerna publish --conventional-commits --yes --registry=https:${{ secrets.NPM_REGISTRY_URL }} --force-publish
+        run: |
+          npm config set //europe-north1-npm.pkg.dev/helical-song-449808-e5/npm-repo/:_password=$NPM_AUTH_TOKEN
+          HUSKY=0 npx lerna publish --conventional-commits --yes --registry=https:${{ secrets.NPM_REGISTRY_URL }} --force-publish
 
       - name: Docker Build
         env:
