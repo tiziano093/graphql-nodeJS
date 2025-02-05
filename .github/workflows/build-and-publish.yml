@@ -35,12 +35,12 @@ jobs:
           NPM_REGISTRY_URL: ${{ secrets.NPM_REGISTRY_URL }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
-          echo "@tiziano093:registry=https:$NPM_REGISTRY_URL" > ~/.npmrc
-          echo "$NPM_REGISTRY_URL:always-auth=true" > ~/.npmrc
-          echo "$NPM_REGISTRY_URL:_password=$NPM_AUTH_TOKEN" >> ~/.npmrc
-          echo "$NPM_REGISTRY_URL }}:username=_json_key_base64" >> ~/.npmrc
-          echo "$NPM_REGISTRY_URL:email=not.valid@email.com" >> ~/.npmrc
-          cat ~/.npmrc  # (Opzionale: per debug, rimuovi in produzione)
+          echo "@tiziano093:registry=https:$NPM_REGISTRY_URL" > .npmrc
+          echo "$NPM_REGISTRY_URL:always-auth=true" > .npmrc
+          echo "$NPM_REGISTRY_URL:_password=$NPM_AUTH_TOKEN" >> .npmrc
+          echo "$NPM_REGISTRY_URL }}:username=_json_key_base64" >> .npmrc
+          echo "$NPM_REGISTRY_URL:email=not.valid@email.com" >> .npmrc
+          cat .npmrc  # (Opzionale: per debug, rimuovi in produzione)
 
       - name: Install dependencies
         run: npm install
