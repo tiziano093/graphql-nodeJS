@@ -1,6 +1,9 @@
 name: Build and Push Docker Image
 
 on:
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
         
 jobs:
@@ -8,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout del repository
       - name: Checkout repository
         uses: actions/checkout@v3
     
@@ -18,18 +20,27 @@ jobs:
           git config --global user.email "ci@example.com"
           git config --global user.name "CI Runner"
 
-      # Setup di Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18' # Sostituisci con la versione di Node.js che usi
+          node-version: '18' 
           cache: 'npm'
+      
+      - name: Generate .npmrc
+        env:
+          NPM_REGISTRY_URL: "https://${{ secrets.NPM_REGISTRY }}"
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        run: |
+          echo "@tiziano093:registry=$NPM_REGISTRY_URL" > ~/.npmrc
+          echo "$NPM_REGISTRY_URL:always-auth=true" > ~/.npmrc
+          echo "$NPM_REGISTRY_URL:_password=$NPM_AUTH_TOKEN" >> ~/.npmrc
+          echo "$NPM_REGISTRY_URL }}:username=_json_key_base64" >> ~/.npmrc
+          echo "$NPM_REGISTRY_URL:email=not.valid@email.com" >> ~/.npmrc
+          cat ~/.npmrc  # (Opzionale: per debug, rimuovi in produzione)
 
-      # Installazione delle dipendenze
       - name: Install dependencies
         run: npm install
         
-      # Lint
       - name: Lint
         run: npm run lint
 
