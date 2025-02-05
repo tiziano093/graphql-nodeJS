@@ -41,10 +41,8 @@ jobs:
           echo "$NPM_REGISTRY_URL }}:username=_json_key_base64" >> .npmrc
           echo "$NPM_REGISTRY_URL:email=not.valid@email.com" >> .npmrc
 
-      - name: check npmrc
-        run: |
-          ls -la
-          cat .npmrc  # (Opzionale: per debug, rimuovi in produzione)
+      - name: Google Artifactory npm auth
+        run: npx google-artifactregistry-auth
 
       - name: Install dependencies
         run: npm install
