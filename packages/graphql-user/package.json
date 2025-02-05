@@ -1,6 +1,6 @@
 {
   "name": "@tiziano093/graphql-user",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "src/index.js",
   "scripts": {
     "test": "jest"
