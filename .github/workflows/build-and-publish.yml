@@ -37,7 +37,7 @@ jobs:
         run: |
           echo "@tiziano093:registry=https:$NPM_REGISTRY_URL" >> .npmrc
           echo "$NPM_REGISTRY_URL:always-auth=true" >> .npmrc
-          echo "$NPM_REGISTRY_URL:_password='$NPM_AUTH_TOKEN'" >> .npmrc
+          echo "$NPM_REGISTRY_URL:_password=\"$NPM_AUTH_TOKEN\"" >> .npmrc
           echo "$NPM_REGISTRY_URL }}:username=_json_key_base64" >> .npmrc
           echo "$NPM_REGISTRY_URL:email=not.valid@email.com" >> .npmrc
       
