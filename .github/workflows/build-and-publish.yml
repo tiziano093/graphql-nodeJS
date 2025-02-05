@@ -5,6 +5,10 @@ on:
   #   branches:
   #     - main
   workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write  # Necessario per fare versioning con Lerna
         
 jobs:
   build-and-publish:
