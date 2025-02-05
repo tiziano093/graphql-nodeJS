@@ -28,10 +28,10 @@ jobs:
       
       - name: Generate .npmrc
         env:
-          NPM_REGISTRY_URL: "https://${{ secrets.NPM_REGISTRY }}"
+          NPM_REGISTRY_URL: ${{ secrets.NPM_REGISTRY_URL }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
         run: |
-          echo "@tiziano093:registry=$NPM_REGISTRY_URL" > ~/.npmrc
+          echo "@tiziano093:registry=https:$NPM_REGISTRY_URL" > ~/.npmrc
           echo "$NPM_REGISTRY_URL:always-auth=true" > ~/.npmrc
           echo "$NPM_REGISTRY_URL:_password=$NPM_AUTH_TOKEN" >> ~/.npmrc
           echo "$NPM_REGISTRY_URL }}:username=_json_key_base64" >> ~/.npmrc
@@ -47,22 +47,33 @@ jobs:
       - name: google auth
         uses: 'google-github-actions/auth@v2'
         with:
-          project_id: 'helical-song-449808-e5'
+          project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Bump Version
         run: npm run publish
 
       - name: Docker Build
-        run: docker build -t tiziano093/graphql-server . -f graphql-server/Dockerfile
+        env:
+          REPO_NAME: ${{ github.repository }}
+        run: |
+          IMAGE_NAME=$(basename $REPO_NAME | tr '[:upper:]' '[:lower:]')
+          docker build -t $IMAGE_NAME . -f graphql-server/Dockerfile
 
       - name: Configure Docker with Google Artifactory
         run: gcloud auth configure-docker europe-north1-docker.pkg.dev
 
       - name: Push Docker image to Artifact Registry
+        env:
+          REPO_NAME: ${{ github.repository }}
         run: |
-          IMAGE_NAME=tiziano093/graphql-server
-          TARGET_IMAGE=europe-north1-docker.pkg.dev/helical-song-449808-e5/docker-repo/$IMAGE_NAME
+          IMAGE_NAME=$(basename $REPO_NAME | tr '[:upper:]' '[:lower:]')
+          TARGET_IMAGE=europe-north1-docker.pkg.dev/${{ secrets.GOOGLE_PROJECT_ID }}/docker-repo/$IMAGE_NAME
 
-          docker tag tiziano093/graphql-server $TARGET_IMAGE
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+
+          docker tag $IMAGE_NAME $TARGET_IMAGE:latest
+          docker tag $IMAGE_NAME $TARGET_IMAGE:$COMMIT_SHA
+
           docker push $TARGET_IMAGE:latest
+          docker push $TARGET_IMAGE:$COMMIT_SHA
