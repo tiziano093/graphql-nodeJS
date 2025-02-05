@@ -30,16 +30,28 @@ jobs:
           node-version: '18' 
           cache: 'npm'
       
-      - name: Generate .npmrc
-        env:
-          NPM_REGISTRY_URL: ${{ secrets.NPM_REGISTRY_URL }}
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        run: |
-          echo "@tiziano093:registry=https:$NPM_REGISTRY_URL" >> .npmrc
-          echo "$NPM_REGISTRY_URL:always-auth=true" >> .npmrc
-          echo "$NPM_REGISTRY_URL:_password=$NPM_AUTH_TOKEN" >> .npmrc
-          echo "$NPM_REGISTRY_URL }}:username=_json_key_base64" >> .npmrc
-          echo "$NPM_REGISTRY_URL:email=not.valid@email.com" >> .npmrc
+      - name: google auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      
+      # - name: Generate .npmrc
+      #   env:
+      #     NPM_REGISTRY_URL: ${{ secrets.NPM_REGISTRY_URL }}
+      #     NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      #   run: |
+      #     echo "@tiziano093:registry=https:$NPM_REGISTRY_URL" >> .npmrc
+      #     echo "$NPM_REGISTRY_URL:always-auth=true" >> .npmrc
+      #     echo "$NPM_REGISTRY_URL:_password=$NPM_AUTH_TOKEN" >> .npmrc
+      #     echo "$NPM_REGISTRY_URL }}:username=_json_key_base64" >> .npmrc
+      #     echo "$NPM_REGISTRY_URL:email=not.valid@email.com" >> .npmrc
+
+      - run: cp npmrc .npmrc
+      - run: npm run artifactregistry-login .npmrc
+
+      - name: check .npmrc
+        run: cat .npmrc
 
       - name: Google Artifactory npm auth
         run: npx google-artifactregistry-auth
@@ -49,12 +61,6 @@ jobs:
         
       - name: Lint
         run: npm run lint
-
-      - name: google auth
-        uses: 'google-github-actions/auth@v2'
-        with:
-          project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Bump Version
         env:
