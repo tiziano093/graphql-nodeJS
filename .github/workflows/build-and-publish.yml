@@ -51,7 +51,7 @@ jobs:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Bump Version
-        run: npm run publish
+        run: HUSKY=0 npx lerna publish --conventional-commits --yes --registry=https:${{ secrets.NPM_REGISTRY_URL }}
 
       - name: Docker Build
         env:
