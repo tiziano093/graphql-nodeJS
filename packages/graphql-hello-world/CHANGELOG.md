@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.4.12 (2025-02-06)
+
+### Bug Fixes
+
+- initial commit ([e9a30e6](https://github.com/tiziano093/graphql-nodeJS/commit/e9a30e6bc57cade72877079a6a45ff37efbb4b52))
+
 ## 1.4.11 (2025-02-05)
 
 **Note:** Version bump only for package @tiziano093/graphql-hello-world
