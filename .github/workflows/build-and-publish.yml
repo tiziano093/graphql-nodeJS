@@ -19,7 +19,7 @@ jobs:
     
       - name: Authenticate with GitHub CLI
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          echo "${{ secrets.PERSONAL_GITHUB_TOKEN }}" | gh auth login --with-token
           git config --global user.email "ci@example.com"
           git config --global user.name "CI Runner"
 
