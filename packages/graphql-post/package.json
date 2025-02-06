@@ -1,6 +1,6 @@
 {
   "name": "@tiziano093/graphql-post",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "main": "src/index.js",
   "scripts": {
     "test": "jest"
